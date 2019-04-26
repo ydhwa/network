@@ -23,11 +23,10 @@ public class PhoneList01 {
 				while(st.hasMoreElements()) {
 					String token = st.nextToken();
 					System.out.print(token);
+					
 					if(index == 0) {	// 이름
 						System.out.print(": ");
-					} else if(index == 1) {	// 전화번호 1
-						System.out.print("-");
-					} else if(index == 2) {	// 전화번호 1
+					} else if(index < 3) {	// 전화번호 1, 2부분
 						System.out.print("-");
 					}
 					index++;
@@ -39,7 +38,9 @@ public class PhoneList01 {
 			e.printStackTrace();
 		} finally {
 			try {
-				br.close();
+				if(br != null) {
+					br.close();
+				}
 			} catch (IOException e) {
 				System.out.println("error: " + e);
 			}

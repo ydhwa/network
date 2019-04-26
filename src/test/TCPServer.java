@@ -18,7 +18,7 @@ public class TCPServer {
 			
 			// 2. 바인딩(binding)
 			// Socket에 SocketAddress(IPAddress + Port)를 바인딩한다.
-			InetAddress inetAddress = InetAddress.getLocalHost();
+//			InetAddress inetAddress = InetAddress.getLocalHost();
 //			String localhost = inetAddress.getHostAddress();
 //			serverSocket.bind(new InetSocketAddress(localhost, 5000));
 //			serverSocket.bind(new InetSocketAddress(inetAddress, 5000));
@@ -37,10 +37,10 @@ public class TCPServer {
 			// 확인은 XShell로. telnet [IP주소] [포트번호]
 			System.out.printf("[server] connected by client[%s:%d]\n", remoteHostAddress, remotePort);
 			
-			// 4. IOStream 받아오기
 			try {
-			InputStream is = socket.getInputStream();
-			OutputStream os = socket.getOutputStream();
+				// 4. IOStream 받아오기
+				InputStream is = socket.getInputStream();
+				OutputStream os = socket.getOutputStream();
 			
 				while(true) {
 					// 5. 데이터 읽기
