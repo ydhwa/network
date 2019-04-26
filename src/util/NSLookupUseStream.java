@@ -8,27 +8,6 @@ import java.net.UnknownHostException;
 public class NSLookupUseStream {
 	
 	public static void main(String[] args) {
-//		Scanner input = new Scanner(System.in);
-//
-//		while(true) {
-//			System.out.print("> ");
-//			String hostname = input.nextLine();
-//			if(hostname.equalsIgnoreCase("exit")) {
-//				break;
-//			}
-//			
-//			InetAddress[] inetAddresses;
-//			try {
-//				inetAddresses = InetAddress.getAllByName(hostname);
-//				for(InetAddress addr: inetAddresses) {
-//					System.out.println(hostname + ": " + addr.getHostAddress());
-//				}
-//			} catch (UnknownHostException e) {
-//				e.printStackTrace();
-//			}
-//		}
-		
-		// --------------------
 		BufferedReader br = null;
 		try {
 			InputStreamReader isr = new InputStreamReader(System.in, "UTF-8");
@@ -54,6 +33,5 @@ public class NSLookupUseStream {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-//		input.close();
 	}
 }
