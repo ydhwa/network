@@ -1,6 +1,7 @@
 package io;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class PhoneList02 {
@@ -21,7 +22,7 @@ public class PhoneList02 {
 				
 				System.out.printf("%s: %s-%s-%s\n", scanner.next(), scanner.next(), scanner.next(), scanner.next());
 			}
-		} catch (Exception e) {	// 원래는 모든 에러에 대해서 catch로 처리해줘야 함
+		} catch (FileNotFoundException e) {	// 원래는 모든 에러에 대해서 catch로 처리해줘야 함
 			System.out.println("error: " + e);
 		} finally {
 			if(scanner != null) {
