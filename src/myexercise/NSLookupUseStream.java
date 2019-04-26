@@ -1,4 +1,4 @@
-package util;
+package myexercise;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
