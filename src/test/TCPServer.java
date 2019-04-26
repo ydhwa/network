@@ -70,14 +70,14 @@ public class TCPServer {
 				e.printStackTrace();
 			} finally {
 				try {
-					if(socket != null && socket.isClosed()) {
+					if(socket != null && !socket.isClosed()) {
 						socket.close();
 					}
 				} catch(IOException e) {
 					e.printStackTrace();
 				}
 			}
-		} catch (IOException e) {	// 잘 발생하지 않음
+		} catch (IOException e) {	// 잘 발생하지 않는 오류
 			e.printStackTrace();
 		} finally {
 			try {
