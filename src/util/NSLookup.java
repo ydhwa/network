@@ -13,7 +13,7 @@ public class NSLookup {
 			try {
 				System.out.print("> ");
 				String hostname = scanner.nextLine();
-				if(hostname.equalsIgnoreCase("exit")) {
+				if("exit".equalsIgnoreCase(hostname)) {
 					break;
 				}
 			

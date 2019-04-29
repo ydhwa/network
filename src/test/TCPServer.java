@@ -3,10 +3,10 @@ package test;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 
 public class TCPServer {
 
@@ -66,6 +66,8 @@ public class TCPServer {
 					// 두 개 열어두면 동작이 되지 않는다.
 					os.write(data.getBytes("UTF-8"));
 				}
+			} catch(SocketException e) {	// SocketException도 IOException 단에서 처리가 되어버리므로 SocketException이 우선 나와야 함
+				System.out.println("[server] sudden closed by client");
 			} catch(IOException e) {
 				e.printStackTrace();
 			} finally {

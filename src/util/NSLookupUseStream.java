@@ -24,7 +24,7 @@ public class NSLookupUseStream {
 			String hostname = null;
 			System.out.printf("> ");
 			while((hostname = br.readLine()) != null) {
-				if(hostname.equalsIgnoreCase("exit")) {
+				if("exit".equalsIgnoreCase(hostname)) {
 					System.out.println("NSLookup 프로그램이 종료됩니다.");
 					break;
 				}
