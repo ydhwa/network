@@ -7,3 +7,7 @@
 - 404, 400 에러 페이지 띄우기
 > src/http/RequestHandler.java
 
+- UDP Time Server/Client 구현하기
+> src/udp/UDPTimeServer.java
+> src/udp/UDPTimeClient.java
+

@@ -19,21 +19,9 @@ public class UDPEchoClient {
 			
 			// 2. 소켓 생성
 			socket = new DatagramSocket();
-			
-			// 2-1. 소켓 버퍼 사이즈 확인
-			int receiveBufferSize = socket.getReceiveBufferSize();
-			int sendBufferSize = socket.getSendBufferSize();
-			System.out.println(receiveBufferSize + ":" + sendBufferSize);
-			
-			// 2-2. 소켓 버퍼 사이즈 변경
-			socket.setReceiveBufferSize(1024 * 10);
-			socket.setSendBufferSize(1024 * 10);
-			receiveBufferSize = socket.getReceiveBufferSize();
-			sendBufferSize = socket.getSendBufferSize();
-			System.out.println(receiveBufferSize + ":" + sendBufferSize);
 
 			while(true) {
-				// 5. 키보드 입력 받기
+				// 3. 키보드 입력 받기
 				System.out.print(">>");
 				String line = scanner.nextLine();
 				if("quit".contentEquals(line)) {
