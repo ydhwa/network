@@ -16,6 +16,9 @@ public class TCPServer {
 			// 1. 서버 소켓 생성
 			serverSocket = new ServerSocket();
 			
+			// 1-1. Time-Wait 시간에 소켓에 포트번호 할당을 가능하게 하기 위해서
+			serverSocket.setReuseAddress(true);
+			
 			// 2. 바인딩(binding)
 			// Socket에 SocketAddress(IPAddress + Port)를 바인딩한다.
 //			InetAddress inetAddress = InetAddress.getLocalHost();
@@ -64,6 +67,11 @@ public class TCPServer {
 					// echo server
 					// PrintWriter를 사용하면 개행 버리기 쉬움 (writeln이 있기 때문). 나중에 과제로는 여기에 멀티스레드 적용한것 구현.
 					// 두 개 열어두면 동작이 되지 않는다.
+					try {	// 지연을 걸어 SO_TIMEOUT 확인해 봄
+						Thread.sleep(2000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 					os.write(data.getBytes("UTF-8"));
 				}
 			} catch(SocketException e) {	// SocketException도 IOException 단에서 처리가 되어버리므로 SocketException이 우선 나와야 함
