@@ -14,6 +14,7 @@ public class RequestHandler extends Thread {
 	// 서비스 하려는 사이트의 최상위 디렉터리
 	private static final String DOCUMENT_ROOT = "./webapp";
 	private Socket socket;
+	private String request;
 
 	public RequestHandler( Socket socket ) {
 		this.socket = socket;
@@ -34,7 +35,7 @@ public class RequestHandler extends Thread {
 			OutputStream os = socket.getOutputStream();
 			BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream(), "utf-8"));
 
-			String request = null;
+			request = null;
 			while(true) {
 				String line = br.readLine();
 
@@ -61,17 +62,11 @@ public class RequestHandler extends Thread {
 				consoleLog("Request: " + tokens[1]);
 				// 정적인 자원을 응답하는 소스
 				responseStaticResource(os, tokens[1], tokens[2]);
-			} else {	// POST, PUT, DELETE, HEAD, CONNECT
-						// 와 같은 Method들은 무시한다.
-				consoleLog("Bad Request: " + tokens[1]);
+			} else {	// POST, PUT, DELETE, HEAD, CONNECT와 같은 Method들은 무시한다.
+				// 잘못된 요청(400)
+				responseError(os, tokens[2], 400, "Bad Request");
+				consoleLog("Bad Request: " + request);
 			}
-
-			// 예제 응답입니다.
-			// 서버 시작과 테스트를 마친 후, 주석 처리 합니다.
-//			os.write( "HTTP/1.1 200 OK\r\n".getBytes( "UTF-8" ) );
-//			os.write( "Content-Type:text/html; charset=utf-8\r\n".getBytes( "UTF-8" ) );	// 여기까지가 response 헤더
-//			os.write( "\r\n".getBytes() );	// 빈 개행. 헤더와 콘텐츠를 나눔
-//			os.write( "<h1>이 페이지가 잘 보이면 실습과제 SimpleHttpServer를 시작할 준비가 된 것입니다.</h1>".getBytes( "UTF-8" ) );
 			
 		} catch( Exception ex ) {
 			consoleLog( "error:" + ex );
@@ -97,15 +92,9 @@ public class RequestHandler extends Thread {
 		
 		File file = new File(DOCUMENT_ROOT + url);
 		if(!file.exists()) {	// 별도의 예외처리 없이 깔끔하게 파일의 존재유무를 확인한다.
-			/* 응답 예시
-			 * 
-			 * HTTP/1.1 404 File Not Found\r\n
-			 * Content-Type:text/html; charset=utf-8\r\n
-			 * \r\n
-			 * HTML 에러 문서
-			 */
-			
-//			response404Error(os, protocol);
+			// 요청 리소스가 존재하지 않음(404)
+			responseError(os, protocol, 404, "File Not Found");
+			consoleLog("Bad Request: " + request);
 			return;
 		}
 		
@@ -113,14 +102,38 @@ public class RequestHandler extends Thread {
 		// 읽어서 네트워크에다가 뿌릴 것이므로 byte로 읽는다.
 		// 예외처리는 throws를 사용한다.(예외처리 회피) responseStaticResource를 호출하는 쪽에서 예외를 처리해줘야 한다.
 		byte[] body = Files.readAllBytes(file.toPath());
+		String contentType = Files.probeContentType(file.toPath());
 		
 		// 응답
 		os.write( (protocol + " 200 OK\r\n").getBytes( "UTF-8" ) );
-		os.write( "Content-Type:text/html; charset=utf-8\r\n".getBytes( "UTF-8" ) );	// 여기까지가 response 헤더
+		os.write( ("Content-Type:" + contentType + "; charset=utf-8\r\n").getBytes( "UTF-8" ) );	// 여기까지가 response 헤더
 		os.write( "\r\n".getBytes() );	// 빈 개행. 헤더와 콘텐츠를 나눔
 		os.write( body );
 	}
 
+	// 에러 페이지 띄움
+	private void responseError(OutputStream os, String protocol, int errorCode, String errorMessage) throws IOException {
+		// 에러 페이지를 띄우는 것이므로 파일이 존재하지 않을 경우의 처리는 하지 않음
+		/* 응답 예시
+		 * 
+		 * HTTP/1.1 [errorCode] [errorMessage]\r\n
+		 * Content-Type:text/html; charset=utf-8\r\n
+		 * \r\n
+		 * HTML 에러 문서(./webapp/error/[errorCode].html)
+		 */
+		File file = new File(DOCUMENT_ROOT + "/error/" + errorCode + ".html");
+		
+		// nio
+		byte[] body = Files.readAllBytes(file.toPath());
+		String contentType = Files.probeContentType(file.toPath());
+		
+		os.write( (protocol + " " + errorCode + " " + errorMessage + "\r\n").getBytes( "UTF-8" ) );
+		os.write( ("Content-Type:" + contentType + "; charset=utf-8\r\n").getBytes( "UTF-8" ) );	// 여기까지가 response 헤더
+		os.write( "\r\n".getBytes() );	// 빈 개행. 헤더와 콘텐츠를 나눔
+		os.write( body );
+	}
+
+	// 로그 출력
 	public void consoleLog( String message ) {
 		System.out.println( "[RequestHandler#" + getId() + "] " + message );
 	}
