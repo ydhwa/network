@@ -6,8 +6,8 @@ import java.net.DatagramSocket;
 import java.net.SocketException;
 
 public class UDPEchoServer {
-	private static final int PORT = 7000;
-	private static final int BUFFER_SIZE = 1024;
+	public static final int PORT = 7000;
+	public static final int BUFFER_SIZE = 1024;
 
 	public static void main(String[] args) {
 		// accept를 할 필요가 없으므로 server socket도 없다.
@@ -29,6 +29,10 @@ public class UDPEchoServer {
 				System.out.println("[server] received: " + message);
 				
 				// 3. 데이터 전송
+				byte[] sendData = message.getBytes("utf-8");
+				// 패킷에는 받는 대상의 주소가 들어 있다.
+				DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, receivePacket.getAddress(), receivePacket.getPort());
+				socket.send(sendPacket);
 			}
 		} catch (SocketException e) {
 			e.printStackTrace();
