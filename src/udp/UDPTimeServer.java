@@ -6,6 +6,7 @@ import java.net.DatagramSocket;
 import java.net.SocketException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * 사용자가 빈 줄("")을 입력하면 오늘 날짜와 현재 시각(24시간제)을 응답해주는 클래스.
@@ -44,6 +45,10 @@ public class UDPTimeServer {
 					Calendar calendar = Calendar.getInstance();
 					SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss a");
 					message = format.format(calendar.getTime());
+					
+					// 다른 방법: System의 타이머를 이용한다.
+//					long curr = System.currentTimeMillis();
+//					message = format.format(new Date(curr));
 				}
 				
 				// 3. 데이터 전송
