@@ -16,7 +16,8 @@ public class EchoClient {
 	 * final을 그나마 상수처럼 쓰기는 하는데, 엄연히 변수임.
 	 * 여기에 마지막으로 지정하는 값이 지정된 값이라는 의미임. = 이 이후에는 값을 대입하지 말라는 의미
 	 */
-	private static final String SERVER_IP = "127.0.0.1";
+	//private static final String SERVER_IP = "127.0.0.1";
+	private static final String SERVER_IP = "192.168.1.48";
 	private static final int SERVER_PORT = 7000;
 
 	// 메소드에 final이 들어가면? -> 이 함수가 마지막이라는 의미. Override 하지 말라는 의미
