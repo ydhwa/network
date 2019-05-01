@@ -3,11 +3,11 @@ package http;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
 
 // 요청을 처리하는 것
@@ -17,14 +17,10 @@ public class RequestHandler extends Thread {
 	private static String documentRoot = "";
 	// 클래스가 로드될 때 이 블럭 안의 내용이 실행됨
 	static {
-		try {
-			// classpath를 절대경로로 바꿈
-			documentRoot = new File(RequestHandler.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getPath();
-			documentRoot += "/webapp";
-			System.out.println("----->" + documentRoot);
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-		}
+		documentRoot = RequestHandler.class.getClass().getResource("/webapp").getPath();
+		
+		InputStream is = RequestHandler.class.getClass().getResourceAsStream("/webapp/index.html");
+		System.out.println("----->" + documentRoot);
 	}
 	
 	private Socket socket;
