@@ -7,12 +7,26 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 
 // 요청을 처리하는 것
 public class RequestHandler extends Thread {
 	// 서비스 하려는 사이트의 최상위 디렉터리
-	private static final String DOCUMENT_ROOT = "./webapp";
+	//private static final String DOCUMENT_ROOT = "./webapp";
+	private static String documentRoot = "";
+	// 클래스가 로드될 때 이 블럭 안의 내용이 실행됨
+	static {
+		try {
+			// classpath를 절대경로로 바꿈
+			documentRoot = new File(RequestHandler.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getPath();
+			documentRoot += "/webapp";
+			System.out.println("----->" + documentRoot);
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	private Socket socket;
 	private String request;
 
@@ -90,7 +104,7 @@ public class RequestHandler extends Thread {
 			url = "/index.html";
 		}
 		
-		File file = new File(DOCUMENT_ROOT + url);
+		File file = new File(documentRoot + url);
 		if(!file.exists()) {	// 별도의 예외처리 없이 깔끔하게 파일의 존재유무를 확인한다.
 			// 요청 리소스가 존재하지 않음(404)
 			responseError(os, protocol, 404, "File Not Found");
@@ -121,7 +135,7 @@ public class RequestHandler extends Thread {
 		 * \r\n
 		 * HTML 에러 문서(./webapp/error/[errorCode].html)
 		 */
-		File file = new File(DOCUMENT_ROOT + "/error/" + errorCode + ".html");
+		File file = new File(documentRoot + "/error/" + errorCode + ".html");
 		
 		// nio
 		byte[] body = Files.readAllBytes(file.toPath());
